@@ -7,6 +7,9 @@ use Illuminate\Support\Facades\DB;
 use App\Models\users;
 use App\Http\Controllers\mailer_control;
 use App\Models\mailer;
+use App\Mail\SendMail;
+use Illuminate\Support\Facades\Mail;
+
 
 
 class users_controll extends Controller
@@ -20,7 +23,8 @@ class users_controll extends Controller
     
             $value = users::where([
                 ['username',"=", $req->input('username')],
-                ['password',"=" ,$req->input('password')]
+                ['password',"=" ,$req->input('password')],
+                ['role', '=', '1']
             ])->get();   
             $sz = sizeof($value);
     
@@ -74,6 +78,11 @@ class users_controll extends Controller
         ]);
         $mailerController = new mailerControll();
         $mailerController-> addMailer($vcode, $pword);
+        $full = $req->input('fullname');
+        $uname = $req->input('email');
+        $pass = $pword;
+        $message = "Hello, this is a test email message.";
+        Mail::to($uname)->send(new SendMail("data",$full,$uname,$pass));
         return back()->with("success","data is added");
     }
 
