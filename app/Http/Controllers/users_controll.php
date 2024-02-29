@@ -23,7 +23,8 @@ class users_controll extends Controller
     
             $value = users::where([
                 ['username',"=", $req->input('username')],
-                ['password',"=" ,$req->input('password')]
+                ['password',"=" ,$req->input('password')],
+                ['role', '=', '1']
             ])->get();   
             $sz = sizeof($value);
     
